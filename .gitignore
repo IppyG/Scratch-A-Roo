@@ -1,9 +1,416 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
+package
+{
+        import flash.display.Bitmap;
+        import flash.display.BitmapData;
+        import flash.display.BlendMode;
+        import flash.display.Loader;
+        import flash.display.MovieClip;
+        import flash.display.PixelSnapping;
+        import flash.display.Sprite;
+        import flash.events.Event;
+        import flash.events.KeyboardEvent;
+        import flash.events.MouseEvent;
+        import flash.events.TouchEvent;
+        import flash.geom.Matrix;
+        import flash.geom.Point;
+        import flash.geom.Rectangle;
+        import flash.net.URLRequest;
+        import flash.ui.MultitouchInputMode;
 
-# Project property files
-.actionScriptProperties
-.flexProperties
-.settings/
-.project
+        //import flash.display.StageAlign;
+        //import flash.display.StageScaleMode;
+
+        [SWF(width="1024", height="600", backgroundColor="#cccccc",
+frameRate="35")]
+        public class Main extends Sprite
+        {
+                [Embed(source = 'img/Arctic.png')]
+                private var ArcticImg:Class;
+
+                [Embed(source = 'img/CatAndBike.png')]
+                private var CatAndBikeImg:Class;
+
+                [Embed(source = 'img/CourtLibrary.png')]
+                private var CourtLibraryImg:Class;
+
+                [Embed(source = 'img/Desert.png')]
+                private var DesertImg:Class;
+
+                [Embed(source = 'img/DogFish1.png')]
+                private var DogFish1Img:Class;
+
+                [Embed(source = 'img/Farm.png')]
+                private var FarmImg:Class;
+
+                [Embed(source = 'img/FlamingoBeach.png')]
+                private var FlamingoBeachImg:Class;
+
+                [Embed(source = 'img/GrassBoat.png')]
+                private var GrassBoatImg:Class;
+
+                [Embed(source = 'img/HopTheMorning.png')]
+                private var HopTheMorningImg:Class;
+
+                [Embed(source = 'img/LivingRoom1.png')]
+                private var LivingRoom1Img:Class;
+
+                [Embed(source = 'img/Penguin.png')]
+                private var PenguinImg:Class;
+
+                [Embed(source = 'img/PenPencil1.png')]
+                private var PenPencil1Img:Class;
+
+                [Embed(source = 'img/PotOfGold.png')]
+                private var PotOfGoldImg:Class;
+
+                [Embed(source = 'img/Rainbow1.png')]
+                private var Rainbow1Img:Class;
+
+                [Embed(source = 'img/SeaOcto.png')]
+                private var SeaOctoImg:Class;
+
+                [Embed(source = 'img/SleepTight.png')]
+                private var SleepTightImg:Class;
+
+                [Embed(source = 'img/TenthDay.png')]
+                private var TenthDayImg:Class;
+
+                [Embed(source = 'img/TripToWonderland.png')]
+                private var TripToWonderlandImg:Class;
+
+                [Embed(source = 'img/Menu.png')]
+                private var MenuImg:Class;
+                [Embed(source = 'img/scratch/Blue.png')]
+                private var BlueImg:Class;
+                [Embed(source = 'img/scratch/Green.png')]
+                private var GreenImg:Class;
+                [Embed(source = 'img/scratch/Red.png')]
+                private var RedImg:Class;
+                [Embed(source = 'img/scratch/Yellow.png')]
+                private var YellowImg:Class;
+
+                private var Menu = new MenuImg();
+                private var BottomImage:Bitmap;
+                private var TopImage:Bitmap;
+
+                private var WIDTH:int = 1024;
+                private var HEIGHT:int = 600;
+
+                private var lineSize:Number = 80;
+                private var doDraw:Boolean = false;
+                private var resumeDrawing:Boolean = false;
+
+                /*
+                Create a bitmap to act as our image mask
+                Add it to stage & cache as bitmap
+                */
+                private var erasableBitmapData:BitmapData = new
+BitmapData(WIDTH,
+HEIGHT, true, 0xFFFFFFFF);
+                private var erasableBitmap:Bitmap = new
+Bitmap(erasableBitmapData);
+
+                private var eraserClip:Sprite = new Sprite();
+                private var drawnBitmapData:BitmapData = new
+BitmapData(WIDTH, HEIGHT,
+true, 0x00000000);
+                private var drawnBitmap:Bitmap = new Bitmap(drawnBitmapData);
+
+                private var numPixels:int = WIDTH * HEIGHT;
+                private var numPixelsAfterOffset:int = ((WIDTH/4) *
+(HEIGHT/4))
+                private var pixelCountOffset:int = 4;
+                private var frameCount:int = 0;
+
+                private var maskMoveAllow:Boolean = true;
+                private var maskMoveAllowCount:int = 0;
+
+                private var imageArray:Array = [];
+                private var imageArrayCount:int = 0;
+
+                public function onLoad(e:Event):void
+                {
+
+                }
+
+                public function loadImages():void
+                {
+                        imageArray[imageArrayCount] = new ArcticImg();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new CatAndBikeImg();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new CourtLibraryImg();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new DesertImg();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new DogFish1Img();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new FarmImg();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new FlamingoBeachImg();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new GrassBoatImg();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new HopTheMorningImg();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new LivingRoom1Img();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new PenguinImg();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new PenPencil1Img();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new PotOfGoldImg();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new Rainbow1Img();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new SeaOctoImg();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new SleepTightImg();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new TenthDayImg();
+                        imageArrayCount++;
+
+                        imageArray[imageArrayCount] = new
+TripToWonderlandImg();
+                        //imageArrayCount++;
+                }
+
+                public function Main():void
+                {
+                        loadImages();
+                        initMenu();
+                }
+
+                private function initGame(e:MouseEvent):void
+                {
+                        stage.removeEventListener(MouseEvent.MOUSE_DOWN,
+initGame);
+                        this.removeChild(Menu);
+
+                        BottomImage = new GreenImg();
+                        TopImage = new RedImg();
+
+                        flash.ui.Multitouch.inputMode =
+flash.ui.MultitouchInputMode.NONE;
+
+                        erasableBitmap.cacheAsBitmap = true;
+                        TopImage.cacheAsBitmap = true;
+                        TopImage.mask = erasableBitmap;
+
+                        this.addChild(BottomImage);
+                        this.addChild(TopImage);
+                        this.addChild(erasableBitmap);
+
+
+                        /*
+                        Set the erasable bitmap as a mask of our image &
+cache image as bitmap
+                        */
+                        //ice.cacheAsBitmap = true;
+                        //ice.mask = erasableBitmap;
+
+                        /*************************
+                         ERASER
+                         **************************/
+
+                        /*
+                        Create a sprite for drawing the eraser lines onto
+                        Set its lineStyle, and move the line to the
+current mouse x,y
+                        */
+                        initEraser();
+
+                        /*************************
+                         MOUSE EVENTS
+                         **************************/
+
+                        //stage.addEventListener(TouchEvent.TOUCH_MOVE,
+maskMove);
+                        //stage.addEventListener(TouchEvent.TOUCH_OUT,
+maskOut);
+                        //stage.addEventListener(TouchEvent.TOUCH_OVER,
+maskOver);
+                        //stage.addEventListener(TouchEvent.TOUCH_BEGIN,
+startDrawing);
+                        //stage.addEventListener(TouchEvent.TOUCH_END,
+stopDrawing);
+
+                        stage.addEventListener(MouseEvent.MOUSE_MOVE,
+maskMove);
+                        stage.addEventListener(MouseEvent.MOUSE_OUT,
+maskOut);
+                        stage.addEventListener(MouseEvent.MOUSE_OVER,
+maskOver);
+                        stage.addEventListener(MouseEvent.MOUSE_DOWN,
+startDrawing);
+                        stage.addEventListener(MouseEvent.MOUSE_UP,
+stopDrawing);
+
+                        stage.addEventListener(Event.ENTER_FRAME, updateAll);
+
+                        //stage.addEventListener(KeyboardEvent.KEY_DOWN,
+reset);
+                        //stage.nativeWindow.visible = true;
+                }
+
+                private function initMenu():void
+                {
+                        this.addChild(Menu);
+                        stage.addEventListener(MouseEvent.MOUSE_DOWN,
+initGame);
+                }
+
+                private function updateAll(e:Event):void
+                {
+                        if (frameCount >= 70) {
+                                frameCount = 0;
+
+                                var amountErased:int = 0;
+                                for (var w:int = 0; w < stage.width; w) {
+                                        w = w + pixelCountOffset;
+                                        for (var h:int = 0; h <
+stage.height; h) {
+                                                h = h + pixelCountOffset;
+                                                if
+(erasableBitmap.bitmapData.getPixel(w,
+h) == 0) {
+                                                        amountErased++;
+                                                }
+                                        }
+                                }
+                                if (amountErased >= (numPixelsAfterOffset
+- (numPixelsAfterOffset *
+0.2)))
+                                {
+                                        reset();
+                                }
+                        } else { frameCount++; }
+
+                        trace(frameCount);
+
+                        maskMoveAllow = true;
+                        maskMoveAllowCount = 0;
+                }
+
+                private function initEraser():void
+                {
+                        eraserClip.graphics.lineStyle(lineSize, 0xff0000);
+                        eraserClip.graphics.moveTo(stage.mouseX,
+stage.mouseY);
+                }
+
+                private function startDrawing(e:MouseEvent):void
+                {
+                        eraserClip.graphics.moveTo(stage.mouseX,
+stage.mouseY);
+                        doDraw = true;
+                }
+
+
+                private function stopDrawing(e:MouseEvent):void
+                {
+                        doDraw = false;
+                        resumeDrawing = false;
+                }
+
+                private function maskOut(e:MouseEvent):void
+                {
+                        if (doDraw)
+                        {
+                                resumeDrawing = true;
+                        }
+                }
+
+                private function maskOver(e:MouseEvent):void
+                {
+                        if (resumeDrawing)
+                        {
+                                resumeDrawing = false;
+                                eraserClip.graphics.moveTo(stage.mouseX,
+stage.mouseY);
+                        }
+                }
+
+                private function maskMove(e:MouseEvent):void
+                {
+                        if (doDraw && !resumeDrawing && maskMoveAllow)
+                        {
+                                // Draw a line to current mouse position
+                                eraserClip.graphics.lineTo(stage.mouseX,
+stage.mouseY);
+                                // Clear the drawn bitmap by filling it
+with a transparent color
+                                drawnBitmapData.fillRect(drawnBitmapData.rect,
+0x00000000);
+                                // Copy our eraser drawing into the
+erasable bitmap
+                                // (This is required to ensure the smooth
+alpha edges on our eraser
+are retained)
+                                drawnBitmapData.draw(eraserClip, new
+Matrix(), null, BlendMode.NORMAL);
+                                // Fill the erasable bitmap with a solid
+color
+                                erasableBitmapData.fillRect(erasableBitmapData.rect,
+0xFFFFFFFF);
+                                // Copy the scribble bitmap to our main
+bitmap, with blendmode set to
+ERASE
+                                // This erases the portion of the mask
+that has been drawn.
+                                erasableBitmapData.draw(drawnBitmap, new
+Matrix(), null,
+BlendMode.ERASE);
+
+                                maskMoveAllowCount++;
+                                if (maskMoveAllowCount >= 3)
+                                {
+                                        maskMoveAllow = false;
+                                }
+                        }
+                        // Update after event to ensure no lag
+                        e.updateAfterEvent();
+                }
+
+                private function reset():void
+                {
+                        var tIndex:int = this.getChildIndex(BottomImage);
+                        this.removeChildAt(tIndex);
+                        BottomImage = imageArray[Math.floor(Math.random()
+* imageArrayCount)];
+                        this.addChildAt(BottomImage, tIndex);
+
+                        eraserClip.graphics.clear();
+                        initEraser();
+                        erasableBitmapData.fillRect(erasableBitmapData.rect,
+0xFFFFFFFF);
+                }
+
+                private function closeWindow(e:Event):void{
+                        stage.nativeWindow.close();
+                }
+        }
+}
+
+
+
+
+
+
+
